@@ -46,7 +46,8 @@ peloton_session_data = {}
 
 
 def get_garmin():
-    global garmin_client if GARMIN_TOKEN:
+    global garmin_client 
+    if GARMIN_TOKEN:
         try:
             garth.client.loads(GARMIN_TOKEN)
             client = garminconnect.Garmin(GARMIN_EMAIL)
