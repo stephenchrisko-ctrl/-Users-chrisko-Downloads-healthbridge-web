@@ -13,7 +13,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
-iimport garminconnect
+import garminconnect
 import garth
 
 from scheduler import init_scheduler, get_cached_data, set_cached_data
