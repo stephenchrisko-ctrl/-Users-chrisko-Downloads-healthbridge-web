@@ -13,7 +13,8 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
-import garminconnect
+iimport garminconnect
+import garth
 
 from scheduler import init_scheduler, get_cached_data, set_cached_data
 from emailer import send_health_report
@@ -36,7 +37,7 @@ DOCTOR_EMAIL    = env("DOCTOR_EMAIL")
 PATIENT_NAME    = env("PATIENT_NAME", "Patient")
 TIMEZONE        = env("TIMEZONE", "America/New_York")
 FRONTEND_URL    = env("FRONTEND_URL", "http://localhost:5173")
-
+GARMIN_TOKEN = env("GARMIN_TOKEN")
 PELOTON_BASE = "https://api.onepeloton.com"
 
 # ── Session store (in-memory) ─────────────────────────────────────────────────
@@ -45,7 +46,16 @@ peloton_session_data = {}
 
 
 def get_garmin():
-    global garmin_client
+    global garmin_client if GARMIN_TOKEN:
+        try:
+            garth.client.loads(GARMIN_TOKEN)
+            client = garminconnect.Garmin(GARMIN_EMAIL)
+            client.garth = garth.client
+            garmin_client = client
+            logger.info("✅ Garmin connected via token")
+            return client
+        except Exception as e:
+            logger.error(f"Garmin token auth failed: {e}")
     if garmin_client:
         return garmin_client
     if GARMIN_EMAIL and GARMIN_PASSWORD:
